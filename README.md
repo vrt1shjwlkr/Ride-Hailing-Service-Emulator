@@ -1,6 +1,6 @@
 # Ride-Hailing-Service-Emulator
 
-
+Ride hailing service emulator (RHSE) is built to collect data of commonly occuring scenarios in ride hailing services (RHS) such as Uber and Lyft. RHSE is a simple tool in Python which can be tuned to different scenarios of RHSes. Below, we detail the requirements and setup instructions to use the tool.
 
 
 
