@@ -1,0 +1,11 @@
+*.pbf
+*.pyc
+*.DS_Store
+*.csv#
+*.png
+*.AppImage
+*.xlsx
+*.csv
+*.pdf
+*.out
+*.txt
