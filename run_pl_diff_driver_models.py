@@ -8,40 +8,42 @@ import matplotlib
 from lppm_planar_geo import *
 from geopy.distance import vincenty
 
-#Paris
+# Geo-coordinates of the area of interest
 lat1 = (48.810519)
 lat2 = (48.901606)
 lon1 = (2.275873)
 lon2 = (2.421079)
 
 db_name = 'cabService_diff_model'
-obf_class_size = 200
-number_riders = 200
-number_drivers = 120
+obf_class_size = # unused
 
+
+number_riders = 200 # Number of riders in the system
+number_drivers = 120 # Number of drivers in the system
+
+# Drivers' acceptance model, M_d; choose from {[['hard', 'hard', 'hard'], ['hard', 'hard', 'exp'], ['hard', 'hard', 'log'],['log', 'hard', 'exp'], ['hard', 'exp', 'exp'], ['exp', 'exp', 'exp'], ['log','exp','exp'], ['log', 'log', 'hard'], ['log','log','exp'], ['log', 'log', 'log']]}
 configs = [['hard', 'hard', 'hard'], ['hard', 'hard', 'exp'], ['hard', 'hard', 'log'],['log', 'hard', 'exp'], ['hard', 'exp', 'exp'], ['exp', 'exp', 'exp'], ['log','exp','exp'], ['log', 'log', 'hard'], ['log','log','exp'], ['log', 'log', 'log']]
 
-mechanisms = ['planar_lap']
-run_time = 400
-eta_tolerance = 400
-max_eta_tolerance=400
-req_delay = 10
-privacy_levels = [1.4]
-genric_utilities = [0.5,1.0]
+mechanisms = ['planar_lap'] # Location privacy preserving mechanism to use on the riders' true locations; choose from {'planar_lap','planar_geo','exp'}. Comparison of different LPPMs is shown in Figures 5 and 11. 
+run_time = 400 # Running time of a single run of RHS emulation. With more time, more data will be collected
+eta_tolerance = 400 # ETA tolerance of drivers; Figure 3 (middle) shows the effect on tailored QL of riders
+max_eta_tolerance=400 # Maximum ETA_t of drivers; more this value, more the data collected
+req_delay = 10 # Delay between two successive requests made by a rider
+privacy_levels = [1.4] # Privacy level, l, is a parameter of planar laplace and planar geometric mechanisms
+genric_utilities = [0.5,1.0] # Radius, in Km, in which privacy protection is expected, theoretically
+obfuscation_level = None # unused
+debug_='MEDIUM' # With 'HIGH', detailed execution will be presented. One can manually add prints as well
 
-obfuscation_level = None
-debug_='MEDIUM'
-
-z_qlg=-1
-
-g_res=100
+z_qlg=-1# unused
+g_res=100 # resolution of the grid used for LPPMs for discrete domains such as planar geometric and exponential mechanisms
 geo_lat=g_res/(vincenty([0,0], [0,1]).meters)
 geo_lon=g_res/(vincenty([0,0], [1,0]).meters)
-alpha=calculate_pg_normalizer(privacy_levels[0],genric_utilities[0],g_res)
+alpha=calculate_pg_normalizer(privacy_levels[0],genric_utilities[0],g_res) # Normalizer required planar geometric and exponential mechanisms
 
-uniform=1
-uniform_eta=1
-uniform_dm=1
+uniform=1 # If uniform==0, nonuniform rider and driver distributions in the area of interest will be maintained 
+uniform_eta=1 # unused
+uniform_dm=1 # unused
+
 
 count=0
 while count<5:
@@ -54,7 +56,7 @@ while count<5:
 		while eta_tolerance < 401:
 			for mech_number, mech_name in enumerate(mechanisms):
 				for i in range(0, len(genric_utilities)):
-					exp_folder='./planar_lap_diff_model_r_%.1f'%genric_utilities[i]
+					exp_folder='./planar_lap_diff_model_r_%.1f'%genric_utilities[i] # name of the folder in which to save the csv files containing attributes of a ride; check csvGenerator.py for more details
 
 					if not os.path.exists(exp_folder):
 					    os.makedirs(exp_folder)
