@@ -35,7 +35,7 @@ class Driver:
         self.surge_factor = None
         self.z_qlg=z_qlg
         self.g_res=g_res
-        self.uniform=uniform
+        self.uniform=uniform # used for greedy remapping and nonuniform distribution cases
         self.uniform_eta=uniform_eta
         self.uniform_dm=uniform_dm
         # Utility parameters

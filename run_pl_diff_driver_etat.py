@@ -45,8 +45,10 @@ alpha=calculate_pg_normalizer(privacy_levels[0],genric_utilities[0],g_res) # Nor
 
 
 uniform=1 # If uniform==0, nonuniform rider and driver distributions in the area of interest will be maintained 
+r_uniform=1
 uniform_eta=1 # unused
 uniform_dm=1 # unused
+g_remap=0
 
 count=0
 
@@ -64,12 +66,12 @@ while count<5:
 					if not os.path.exists(exp_folder):
 					    os.makedirs(exp_folder)
 
-					mongo_cmd = 'python mongodbGenerator.py {} {} 15 {} {} {} {} {} {} {} {} {} {}'.format(number_riders, number_drivers, db_name, mech_name, genric_utilities[i], privacy_levels[0],z_qlg,g_res,uniform,alpha,geo_lat,geo_lon)
+					mongo_cmd = 'python mongodbGenerator.py {} {} 15 {} {} {} {} {} {} {} {} {} {} {} {}'.format(number_riders, number_drivers, db_name, mech_name, genric_utilities[i], privacy_levels[0],z_qlg,g_res,uniform,alpha,geo_lat,geo_lon,r_uniform,g_remap)
 					return_value=os.system(mongo_cmd)
 					# print('Return value for mongodb call',return_value)
 
-					cmd = 'python cabService.py {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}'.format(db_name, obf_class_size, number_riders, number_drivers, genric_utilities[i], 
-						obfuscation_level, run_time, eta_tolerance, dd_surge_neg, dd_surge_less_than_one, dd_surge_more_than_one, req_delay, mech_name, privacy_levels[0], None, None, None, debug_,count,exp_folder,z_qlg,g_res,uniform_eta,uniform_dm,alpha,geo_lat,geo_lon,uniform)
+					cmd = 'python cabService.py {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}'.format(db_name, obf_class_size, number_riders, number_drivers, genric_utilities[i], 
+						obfuscation_level, run_time, eta_tolerance, dd_surge_neg, dd_surge_less_than_one, dd_surge_more_than_one, req_delay, mech_name, privacy_levels[0], None, None, None, debug_,count,exp_folder,z_qlg,g_res,uniform_eta,uniform_dm,alpha,geo_lat,geo_lon,uniform,r_uniform,g_remap)
 
 					print('#############################  Executing next command {} #############################'.format(cmd))
 					return_value_=os.system(cmd)

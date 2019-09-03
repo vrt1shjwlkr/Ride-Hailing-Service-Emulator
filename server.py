@@ -135,33 +135,15 @@ class Server:
     def updateMongoDriver(self, driver):
         if self.serviceActive:
             self.serviceActive = False
-        
-        # print('Ride complete: updating driver location {} {}'.format(driver.rideDestination[0], driver.rideDestination[1]))
-        # region_row = int(self.regions * ((driver.rideDestination[0] - self.regionLon1)/(self.regionLon2-self.regionLon1)))
-        # region_col = int(self.regions * ((driver.rideDestination[1] - self.regionLat1)/(self.regionLat2-self.regionLat1)))
-        # region = (self.regions * region_col) + region_row
-        # dbDrivers=self.database.drivers
-        # dbDrivers.update(
-        #     {"userID":driver.id},
-        #     {
-        #         "userID":driver.id,
-        #         "userType":"driver",
-        #         "region":region,
-        #         "locations":{
-        #             "type":"Point",
-        #             "coordinates":[driver.rideDestination[0], driver.rideDestination[1]]
-        #         }
-        #     }
-        # )
 
-        # Following code non-uniformly distributes the drivers
-        # if driver.uniform==0:
-        #     z=random.random()
-        #     if z<0.95:
-        #         driver.rideDestination[0]=np.random.uniform(self.regionLat1,self.regionLat1+((self.regionLat2-self.regionLat1)/2),1)[0]
-        #     else:
-        #         driver.rideDestination[0]=np.random.uniform(self.regionLat1+((self.regionLat2-self.regionLat1)/2),self.regionLat2,1)[0]
-        # driver.rideDestination[1]=np.random.uniform(self.regionLon1,self.regionLon1+((self.regionLon2-self.regionLon1)/2),1)[0]
+        # Following code is for greedy remapping experiment in Figure 6
+        if driver.uniform==0:
+            z=random.random()
+            if z<0.95:
+                driver.rideDestination[0]=np.random.uniform(self.regionLat1,self.regionLat1+((self.regionLat2-self.regionLat1)/2),1)[0]
+            else:
+                driver.rideDestination[0]=np.random.uniform(self.regionLat1+((self.regionLat2-self.regionLat1)/2),self.regionLat2,1)[0]
+        driver.rideDestination[1]=np.random.uniform(self.regionLon1,self.regionLon1+((self.regionLon2-self.regionLon1)/2),1)[0]
 
         region_row = int(self.regions * ((driver.rideDestination[0] - self.regionLat1)/(self.regionLat2-self.regionLat1)))
         region_col = int(self.regions * ((driver.rideDestination[1] - self.regionLon1)/(self.regionLon2-self.regionLon1)))
@@ -180,45 +162,7 @@ class Server:
             }
         )
 
-        '''
-        # Commented piece of code should be used when drivers' locations are also obfuscated
-        region_row = int(self.regions * ((driver.rideDestination[0] - self.regionLon1)/(self.regionLon2-self.regionLon1)))
-        region_col = int(self.regions * ((driver.rideDestination[1] - self.regionLat1)/(self.regionLat2-self.regionLat1)))
-        region = (self.regions * region_col) + region_row
-
-        if driver.gen_utility == None:
-            print('No input for obfuscation; exiting')
-            sys.exit()
-        [lat_obf, lon_obf] = obfuscate_loc(driver.mech_name, driver.rideDestination, driver.gen_utility, driver.privacy_level)
-        while check_validity(self.regionLat1, self.regionLon1, self.regionLat2, self.regionLon2, [lat_obf, lon_obf]) == False:
-            [lat_obf, lon_obf] = obfuscate_loc(driver.mech_name, driver.rideDestination, driver.gen_utility, driver.privacy_level)
-
-        region_row_obf = int(self.regions * ((lat_obf - self.regionLat1)/(self.regionLat2-self.regionLat1)))
-        region_col_obf = int(self.regions * ((lon_obf - self.regionLon1)/(self.regionLon2-self.regionLon1)))
-        region_obf = (self.regions * region_col_obf) + region_row_obf
-
-        print('Ride complete: updating driver location to {} {} and obfuscated to {} {}'.format(driver.rideDestination[0], driver.rideDestination[1], lat_obf, lon_obf))
-
-        dbDrivers=self.database.drivers
-        dbDrivers.update(
-            {"userID":driver.id},
-            {
-                "userID":driver.id,
-                "userType":"driver",
-                "region":region,
-                "locations":{
-                    "type":"Point",
-                    "coordinates":[driver.rideDestination[0], driver.rideDestination[1]]
-                },
-                "region_obf":region_obf,
-                "location_obf":{
-                    "type":"Point",
-                    "coordinates":[lat_obf, lon_obf]
-                }
-            }
-        )
-        '''
-
+    
     def map_to_grid(self,rider):
         lat_count=round(float(vincenty([self.regionLat1,self.regionLon1], [self.regionLat2,self.regionLon1]).meters)/rider.g_res)
         lon_count=round(float(vincenty([self.regionLat1,self.regionLon1], [self.regionLat1,self.regionLon2]).meters)/rider.g_res)
@@ -235,6 +179,7 @@ class Server:
         rider.rideDestination[0]=self.regionLat1+lat_idx*x_
         rider.rideDestination[1]=self.regionLon1+lon_idx*y_
 
+    
     def update_mongo_rider(self, rider):
         if self.serviceActive:
             self.serviceActive = False
@@ -250,14 +195,13 @@ class Server:
             if rider.gen_utility == None:
                 print('No input for obfuscation; exiting')
                 sys.exit()
-            [lat_obf, lon_obf]=obfuscate_loc(rider.mech_name, rider.rideDestination, rider.gen_utility, rider.privacy_level, [self.regionLat1,self.regionLon1,self.regionLat2,self.regionLon2], rider.g_res,rider.alpha,rider.geo_lat,rider.geo_lon)
-            [lat_obf, lon_obf]=truncate_loc(self.regionLat1, self.regionLon1, self.regionLat2, self.regionLon2, [lat_obf, lon_obf])
-            # [lat_obf, lon_obf]=truncate_loc(self.regionLat1, self.regionLon1, self.regionLat1+(self.regionLat2-self.regionLat1)/2, self.regionLon2, [lat_obf, lon_obf])
-            # [lat_obf, lon_obf]=truncate_loc(self.regionLat1, self.regionLon1, self.regionLat1+(self.regionLat2-self.regionLat1)/2, self.regionLon2+(self.regionLon2-self.regionLon1)/2, [lat_obf, lon_obf])
             
-            # while check_validity(self.regionLat1, self.regionLon1, self.regionLat2, self.regionLon2, [lat_obf, lon_obf]) == False:
-            #     # print('Rider {} obfuscated location is out of region'.format(rider.id))
-            #     [lat_obf, lon_obf] = obfuscate_loc(rider.mech_name, rider.rideDestination, rider.gen_utility, rider.privacy_level, [self.regionLat1, self.regionLon1, self.regionLat2, self.regionLon2], rider.g_res, rider.alpha, rider.geo_lat,rider.geo_lon)
+            [lat_obf, lon_obf]=obfuscate_loc(rider.mech_name, rider.rideDestination, rider.gen_utility, rider.privacy_level, [self.regionLat1,self.regionLon1,self.regionLat2,self.regionLon2], rider.g_res,rider.alpha,rider.geo_lat,rider.geo_lon)
+            
+            if not rider.greedy_remap:
+                [lat_obf, lon_obf]=truncate_loc(self.regionLat1, self.regionLon1, self.regionLat2, self.regionLon2, [lat_obf, lon_obf])
+            else:
+                [lat_obf, lon_obf]=truncate_loc(self.regionLat1, self.regionLon1, self.regionLat1+(self.regionLat2-self.regionLat1)/2, self.regionLon2, [lat_obf, lon_obf])
 
         region_row_obf = int(self.regions * (lat_obf - self.regionLat1)/(self.regionLat2-self.regionLat1))
         region_col_obf = int(self.regions * (lon_obf - self.regionLon1)/(self.regionLon2-self.regionLon1))

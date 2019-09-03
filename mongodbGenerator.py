@@ -32,7 +32,7 @@ Output:
     Database of riders and drivers managed by the mongoclient.
 '''
 
-def generate_fake_data_obf_rider(lat1, lon1, lat2, lon2, regions, num_riders, num_drivers, database_name, mech_name, gen_util, privacy_level, z_qlg, g_res,alpha,geo_lat,geo_lon, uniform=1):
+def generate_fake_data_obf_rider(lat1, lon1, lat2, lon2, regions, num_riders, num_drivers, database_name, mech_name, gen_util, privacy_level, z_qlg, g_res,alpha,geo_lat,geo_lon, uniform=1,r_uniform=1,g_remap=0):
     if database_name in mongo.database_names():
         mongo.drop_database(database_name)
 
@@ -54,9 +54,10 @@ def generate_fake_data_obf_rider(lat1, lon1, lat2, lon2, regions, num_riders, nu
        
         if uniform<1:
             # if uniform is set to 0, assign the  non-uniform initial locations to the driver and rider objects
-
-            lat[:num_riders]=lat_riders # <------ If only drivers should have non-uniform initial locations, comment out this line.
             lat[num_riders:]=lat_drivers
+        
+        if r_uniform<1:
+            lat[:num_riders]=lat_riders # <------ If only drivers should have non-uniform initial locations, comment out this line.
 
     elif mech_name=='planar_geo' or mech_name=='exp':
         # Generate discrete locations  as planar geometric and exponential mechanisms are designed for finite but discrete space
@@ -78,6 +79,7 @@ def generate_fake_data_obf_rider(lat1, lon1, lat2, lon2, regions, num_riders, nu
 
         if uniform<1:
             lat_drivers=np.append(np.random.uniform(lat1,lat1+(lat2-lat1)/2,int(num_drivers*0.95)),np.random.uniform(lat1+(lat2-lat1)/2,lat2,(num_drivers-int(num_drivers*0.95))))
+        if r_uniform<1:
             lat_riders=np.append(np.random.uniform(lat1,lat1+(lat2-lat1)/2,int(num_riders*0.05)),np.random.uniform(lat1+(lat2-lat1)/2,lat2,(num_riders-int(num_riders*0.05))))
 
         lat=np.append(lat_riders,lat_drivers)
@@ -91,16 +93,13 @@ def generate_fake_data_obf_rider(lat1, lon1, lat2, lon2, regions, num_riders, nu
         region_row = int(regions * (lat[i] - lat1)/(lat2-lat1))
         region_col = int(regions * (lon[i] - lon1)/(lon2-lon1))
         region = regions * region_col + region_row
-
-        [lat_obf, lon_obf]=obfuscate_loc(mech_name, [lat[i], lon[i]], gen_util, privacy_level, [lat1, lon1, lat2, lon2], g_res,alpha,geo_lat,geo_lon)
-        [lat_obf, lon_obf]=truncate_loc(lat1, lon1, lat2, lon2, [lat_obf, lon_obf])
         
-        # [lat_obf, lon_obf]=truncate_loc(lat1, lon1, lat1+(lat2-lat1)/2, lon2, [lat_obf, lon_obf])
-        # [lat_obf, lon_obf]=truncate_loc(lat1, lon1, lat1+(lat2-lat1)/2, lon2+(lon2-lon1)/2, [lat_obf, lon_obf])
-
-        # while check_validity(lat1, lon1, lat2, lon2, [lat_obf, lon_obf]) == False:
-        #     # print('Rider obfuscated location is out of region')
-        #     [lat_obf, lon_obf]=obfuscate_loc(mech_name, [lat[i], lon[i]], gen_util, privacy_level, [lat1, lon1, lat2, lon2], g_res,alpha,geo_lat,geo_lon)
+        [lat_obf, lon_obf]=obfuscate_loc(mech_name, [lat[i], lon[i]], gen_util, privacy_level, [lat1, lon1, lat2, lon2], g_res,alpha,geo_lat,geo_lon)
+        
+        if not g_remap:
+            [lat_obf, lon_obf]=truncate_loc(lat1, lon1, lat2, lon2, [lat_obf, lon_obf])
+        else:
+            [lat_obf, lon_obf]=truncate_loc(lat1, lon1, lat1+(lat2-lat1)/2, lon2, [lat_obf, lon_obf])
 
         dist+=vincenty([lat_obf,lon_obf], [lat[i], lon[i]]).meters
         # print('vincenty dist ',vincenty([lat_obf,lon_obf], [lat[i], lon[i]]).meters)
@@ -174,5 +173,6 @@ uniform=float(sys.argv[10])
 alpha=float(sys.argv[11])
 geo_lat=float(sys.argv[12])
 geo_lon=float(sys.argv[13])
+r_uniform=float(sys.argv[14])
 
 generate_fake_data_obf_rider(paris_lat1, paris_lon1, paris_lat2, paris_lon2, int(regions), int(num_riders), int(num_drivers), database_name, mech_name, gen_util, privacy_level,z_qlg,g_res,alpha,geo_lat,geo_lon,uniform=uniform)

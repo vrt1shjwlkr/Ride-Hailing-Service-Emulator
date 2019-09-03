@@ -22,7 +22,7 @@ lon2 = (2.421079)
 This class imitates rider behaviours by implementing relevant functions
 '''
 class Rider:
-    def __init__(self, riderID, server, debug_, gen_utility, obf_level, req_delay, mech_name, privacy_level, z_qlg, g_res,alpha,geo_lat,geo_lon):
+    def __init__(self, riderID, server, debug_, gen_utility, obf_level, req_delay, mech_name, privacy_level, z_qlg, g_res,alpha,geo_lat,geo_lon,r_uniform,g_remap=False):
         # common
         self.server=server
         self.debug_=debug_
@@ -53,6 +53,8 @@ class Rider:
         self.real_num_of_trials = 0
         self.rideDestination = None
         self.driver_eta = None
+        self.uniform=r_uniform # used for greedy remapping and nonuniform distribution cases
+        self.greedy_remap=g_remap
         self.real_last_match_distance = SEARCH_RAD
         self.real_location_drivers = None
         self.real_loc_req_accept_time = None
@@ -166,28 +168,17 @@ class Rider:
 
         self.obf_real_eta = etas[0]
         
-        '''
-        # Generate a destination region using obfuscation
-        self.rideDestination = obfuscate_loc('circular', self.rideRequestLocation, 2.5, None)
-        while check_validity(self.server, self.rideDestination) == False:
-            self.rideDestination = obfuscate_loc('circular', self.rideRequestLocation, 2.5, None)
-        self.obf_rideDestination = obfuscate_loc(self.mech_name, self.rideDestination, self.gen_utility, self.privacy_level)
-        while check_validity(self.server, self.obf_rideDestination) == False:
-            self.obf_rideDestination = obfuscate_loc(self.mech_name, self.rideDestination, self.gen_utility, self.privacy_level)
-        '''
-
-        # Destination will never be out of the region
-        # Destinations are not obfuscated in this part of the experiments
         self.rideDestination = []
-        # if self.mech_name=='planar_lap':
+        
         self.rideDestination.append(numpy.random.uniform(self.server.regionLat1, self.server.regionLat2))
         self.rideDestination.append(numpy.random.uniform(self.server.regionLon1, self.server.regionLon2))
 
-        # z=random.random()
-        # if z<0.05:
-        #     self.rideDestination[0]=np.random.uniform(self.server.regionLat1,self.server.regionLat1+((self.server.regionLat2-self.server.regionLat1)/2),1)[0]
-        # else:
-        #     self.rideDestination[0]=np.random.uniform(self.server.regionLat1+((self.server.regionLat2-self.server.regionLat1)/2),self.server.regionLat2,1)[0]
+        if self.uniform==0:
+            z=random.random()
+            if z<0.05:
+                self.rideDestination[0]=np.random.uniform(self.server.regionLat1,self.server.regionLat1+((self.server.regionLat2-self.server.regionLat1)/2),1)[0]
+            else:
+                self.rideDestination[0]=np.random.uniform(self.server.regionLat1+((self.server.regionLat2-self.server.regionLat1)/2),self.server.regionLat2,1)[0]
         
 
 

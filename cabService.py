@@ -11,7 +11,7 @@ from estimateETA import *
  
 def simulation(env, db_name, debug_, obf_class_size, num_riders, num_drivers, gen_utility, obf_level, env_time, eta_tolerance, dd_surge_neg,
     dd_surge_less_than_one, dd_surge_more_than_one, req_delay, mech_name, privacy_level, regression_data_file, d_regression_data_file, 
-    mech_number,count,exp_folder,z_qlg, g_res,alpha,geo_lat,geo_lon,uniform_eta=1,uniform_dm=1,uniform=1):
+    mech_number,count,exp_folder,z_qlg, g_res,alpha,geo_lat,geo_lon,uniform_eta=1,uniform_dm=1,uniform=1,r_uniform=1,g_remap=0):
     # Name of file to save data to
     gen_utility_name = 'NA' if gen_utility == None else str(int(1000 * gen_utility))
     privacy_level_name = str(privacy_level)
@@ -35,7 +35,7 @@ def simulation(env, db_name, debug_, obf_class_size, num_riders, num_drivers, ge
     riderIDs = list(mongoClient[db_name].riders.distinct("userID"))
 
     for i in range(num_riders):
-        server.riderObjects.append(Rider(i, server, debug_, gen_utility, obf_level, req_delay, mech_name, privacy_level,z_qlg,g_res,alpha,geo_lat,geo_lon))
+        server.riderObjects.append(Rider(i, server, debug_, gen_utility, obf_level, req_delay, mech_name, privacy_level,z_qlg,g_res,alpha,geo_lat,geo_lon,r_uniform,g_remap))
 
     for i in range(num_drivers):
         server.driverObjects.append(Driver(i, server, debug_, eta_tolerance, dd_surge_neg, dd_surge_less_than_one, dd_surge_more_than_one, gen_utility, mech_name, privacy_level,z_qlg,g_res,uniform_eta,uniform_dm,uniform))
@@ -118,12 +118,14 @@ alpha=float(sys.argv[25])
 geo_lat=float(sys.argv[26])
 geo_lon=float(sys.argv[27])
 uniform=int(sys.argv[28])
+r_uniform=int(sys.argv[29])
+g_remap=int(sys.argv[30])
 
 env = simpy.rt.RealtimeEnvironment(factor=0.01, strict=False)
 
 env.process(simulation(env, db_name, debug_, obf_class_size, num_riders, num_drivers, gen_utility, obf_level, env_time, eta_tolerance, dd_surge_neg, 
     dd_surge_less_than_one, dd_surge_more_than_one, req_delay, mech_name, privacy_level, regression_data_file, d_regression_data_file, mech_number,
-    count,exp_folder,z_qlg,g_res,alpha,geo_lat,geo_lon,uniform_eta,uniform_dm,uniform))
+    count,exp_folder,z_qlg,g_res,alpha,geo_lat,geo_lon,uniform_eta,uniform_dm,uniform,r_uniform,g_remap))
 
 err_count=0
 env.run(until=env_time)
