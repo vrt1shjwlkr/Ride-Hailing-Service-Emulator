@@ -18,16 +18,28 @@ Ride hailing service emulator (RHSE) is built to collect the data of commonly oc
 
 - RHSE is built to configure different scenarios of RHSes, as described in Section 5.2. RHSes are complex systems with multiple tunable parameters, including the ones given in Table 4. We have detailed the description and variable name of each in run_pl_diff_driver_eta.py.
 
-## Reproducing the results in the paper:
+## Reproducing the results:
 
-We give somescripts to run to reproduce the results in the paper. The specific scripts and the corresponding results in the paper are as follows:
+In order to reproduce the results in the paper, we provide sample scripts which can be modified to obtain the rest of the results in the paper. The details are as follows:
+
+### Reproducing Figure 3
+This figure demonstrates the effect of different parameters of RHSes on the evaluation of LPPMs. For demonstration, we use planar Laplace mechanism. More specifically, the figure demonstrates the effect of -- drivers' acceptance model, drivers' ETA tolerance and the number of drivers in each run; the details of these parameters are in Sec. 5.1.2.
 
 
-commands:
-To create mongodb database use:
-	python mongodbGenerator.py <num_of_riders> <num_of_drivers> <num_of_regions> <database_name> <lppm_name> <generic_utility> <privacy_level>
-	sample - python mongodbGenerator.py 100 40 30 cabService
-	
-To run ride hailing service simulation use:
-	python cabService.py <db_name> <obfuscation_class_size> <num_of_riders> <num_of_drivers> <obfuscation_level> <gen_utility> <simulation_time> <eta_tolerance> <eta_diff_tolerance>
-	sample - python cabService.py cabService 200 100 60 0.1 1 10 450 150
+- run_pl_diff_driver_models.py reproduces the results of Figure 3 (left)
+- run_pl_diff_driver_etat.py reproduces the results of Figure 3 (middle)
+- To reproduce the results of Figure 3 (right), please vary the number of drivers using variable called number_drivers as required.
+
+
+### Reproducing Figure 4
+
+This figure compares generic and tailored QLes due to different mechanisms under uniform and nonuniform distributions of RHS players, i.e., riders and drivers. 
+
+- run_pl_uni_vs_nonuni.py reproduces the results in Figure 4 (right). Based on number of runs, the results may look different. We recommend collecting data with run_time=400.
+- To reproduce the results in Figure 4 (left), collect data for planar Laplace and exponential mechanisms while setting uniform=1. This can be done by simply modifying run_pl_uni_vs_nonuni.py.
+- To reproduce the results in Figure 4 (middle), collect data for planar Laplace and exponential mechanisms while setting uniform=0. This can be done by simply modifying run_pl_uni_vs_nonuni.py.
+
+
+### Reproducing Figure 5
+
+This figure compares planar Laplace and two variants of planar geometric with different grid resolution (g_res). The comparison is in terms of tailored and generic QLes of riders. The results can be reproduced by running run_epss_pl_pg.py.
