@@ -43,3 +43,7 @@ This figure compares generic and tailored QLes due to different mechanisms under
 ### Reproducing Figure 5
 
 This figure compares planar Laplace and two variants of planar geometric with different grid resolution (g_res). The comparison is in terms of tailored and generic QLes of riders. The results can be reproduced by running run_epss_pl_pg.py.
+
+### Reproducing Figure 6
+
+This figure compares tailored and generic utility losses of riders when planar laplace mechanism is used with and without greedy remapping described in Sec. 6.4. The results can be reproduced by running run_pl_greedy_remap.py.
