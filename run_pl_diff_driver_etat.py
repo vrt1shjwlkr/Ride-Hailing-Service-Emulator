@@ -26,7 +26,7 @@ configs=[['hard', 'hard', 'hard']] # Drivers' acceptance model, M_d; choose from
 
 mechanisms = ['planar_lap'] # Location privacy preserving mechanism to use on the riders' true locations; choose from {'planar_lap','planar_geo','exp'}. Comparison of different LPPMs is shown in Figures 5 and 11. 
 
-run_time = 200 # Running time of a single run of RHS emulation. With more time, more data will be collected
+run_time = 400 # Running time of a single run of RHS emulation. With more time, more data will be collected
 eta_tolerance = 400 # ETA tolerance of drivers; Figure 3 (middle) shows the effect on tailored QL of riders
 max_eta_tolerance=2000 # Maximum ETA_t of drivers; more this value, more the data collected
 req_delay = 10 # Delay between two successive requests made by a rider

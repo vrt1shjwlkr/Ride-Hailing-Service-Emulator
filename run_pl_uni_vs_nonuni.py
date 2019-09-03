@@ -25,7 +25,7 @@ number_drivers = 120
 
 configs=[['hard', 'hard', 'hard']]
 mechanisms = ['planar_lap']
-run_time = 200
+run_time = 400
 eta_tolerance = 100
 req_delay = 10
 privacy_levels = [1.4]
