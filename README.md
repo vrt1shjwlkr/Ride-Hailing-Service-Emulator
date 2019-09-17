@@ -11,16 +11,13 @@ Ride hailing service emulator (RHSE) is built to collect the data of commonly oc
 - Please follow the following commands to set up mongodb: (Alternately, you can try more detailed set up instructions here: https://tecadmin.net/install-mongodb-on-ubuntu/):<br />
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4<br />
-
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list *<--- This command will change if you have different Ubuntu, e.g., 18.04*<br />
-
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list <br />
 sudo apt update<br />
 sudo apt install mongodb-org<br />
 sudo systemctl enable mongod<br />
 sudo systemctl start mongod 
 
-To check if the mongodb is correctly set up, please check the version using *mongod --version* command.
-
+To check if the mongodb is correctly set up, please check the version using *mongod --version* command. The second command will change based on the version of Ubuntu you are using.
 
 ## High level flow of the code:
 
