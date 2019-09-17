@@ -6,7 +6,8 @@ Ride hailing service emulator (RHSE) is built to collect the data of commonly oc
 ## Requirements:
 
 - We tested our code on Ubuntu 16.04 LTS with Python 2.7.12
-- Python packages required (along with their versions we used while testing) are listed in requirements.txt and can be installed using pip install -r requirements.txt
+- Python packages required (along with their versions we used while testing) are listed in requirements.txt and can be installed using *pip install -r requirements.txt*
+- 'python-tk' is required to work along with the matplotlib package, which can be installed using 'apt-get install python-tk'
 
 
 ## High level flow of the code:
