@@ -2,7 +2,6 @@ from __future__ import division
 import numpy, simpy, sys, os, datetime, random, simplejson, urllib, logging
 from globalvars import *
 from pymongo import MongoClient
-from lppmConstantNoise import *
 from distance_apis import *
 from lppm import *
 from geopy.distance import vincenty

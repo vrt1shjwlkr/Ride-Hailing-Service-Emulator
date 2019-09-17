@@ -1,0 +1,5 @@
+regions=15
+paris_lat1=48.810519
+paris_lat2=48.901606
+paris_lon1=2.275873
+paris_lon2=2.421079
