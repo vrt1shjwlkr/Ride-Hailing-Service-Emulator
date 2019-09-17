@@ -8,6 +8,18 @@ Ride hailing service emulator (RHSE) is built to collect the data of commonly oc
 - We tested our code on Ubuntu 16.04 LTS with Python 2.7.12
 - Python packages required (along with their versions we used while testing) are listed in requirements.txt and can be installed using *pip install -r requirements.txt*
 - 'python-tk' is required to work along with the matplotlib package, which can be installed using 'apt-get install python-tk'
+- Please follow the following commands to set up mongodb: (Alternately, you can try more detailed set up instructions here: https://tecadmin.net/install-mongodb-on-ubuntu/):<br />
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4<br />
+
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list *<--- This command will change if you have different Ubuntu, e.g., 18.04*<br />
+
+sudo apt update<br />
+sudo apt install mongodb-org<br />
+sudo systemctl enable mongod<br />
+sudo systemctl start mongod 
+
+To check if the mongodb is correctly set up, please check the version using *mongod --version* command.
 
 
 ## High level flow of the code:
