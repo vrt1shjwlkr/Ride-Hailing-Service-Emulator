@@ -20,23 +20,23 @@ Using mongodbGenerator.py, one can generate a database of riders and drivers. We
 
 Set of variable and example values:
 
-num_riders = 200
-num_drivers = 120
-regions = 15
-db_name = 'example_Database'
-mech_name= 'planar_lap'
-g_res = 100
-genric_util = 1.0
-privacy_leve = 1.4
-z_qlg = -1 # unused
-g_res = 100
-uniform = 1
-r_uniform = 1
-g_remap = 0
+num_riders = 200 <br />
+num_drivers = 120 <br />
+regions = 15 <br />
+db_name = 'example_Database' <br />
+mech_name= 'planar_lap' <br />
+g_res = 100 <br />
+genric_util = 1.0 <br />
+privacy_leve = 1.4 <br />
+z_qlg = -1 # unused <br />
+g_res = 100 <br />
+uniform = 1 <br />
+r_uniform = 1 <br />
+g_remap = 0 <br />
 
-Following variable are used only for exponential and geometric mechanisms, hence set to arbitrary values:
-alpha=10 
-geo_lat=10
+Following variable are used only for exponential and geometric mechanisms, hence set to arbitrary values:<br />
+alpha=10 <br />
+geo_lat=10<br />
 geo_lon=10
 
 The command is as follows:
