@@ -8,18 +8,26 @@ import matplotlib
 from lppm_planar_geo import *
 from geopy.distance import vincenty
 
+
+# Variable required for generating database of riders and drivers
+db_name = 'cabService_diff_model'
+
 # Geo-coordinates of the area of interest
 lat1 = (48.810519)
 lat2 = (48.901606)
 lon1 = (2.275873)
 lon2 = (2.421079)
 
-db_name = 'cabService_diff_model'
-obf_class_size = # unused
-
-
 number_riders = 200 # Number of riders in the system
 number_drivers = 120 # Number of drivers in the system
+regions = 15 # hardcoded
+
+
+
+
+
+
+obf_class_size = 200 # unused
 
 # Drivers' acceptance model, M_d; choose from {[['hard', 'hard', 'hard'], ['hard', 'hard', 'exp'], ['hard', 'hard', 'log'],['log', 'hard', 'exp'], ['hard', 'exp', 'exp'], ['exp', 'exp', 'exp'], ['log','exp','exp'], ['log', 'log', 'hard'], ['log','log','exp'], ['log', 'log', 'log']]}
 configs = [['hard', 'hard', 'hard'], ['hard', 'hard', 'exp'], ['hard', 'hard', 'log'],['log', 'hard', 'exp'], ['hard', 'exp', 'exp'], ['exp', 'exp', 'exp'], ['log','exp','exp'], ['log', 'log', 'hard'], ['log','log','exp'], ['log', 'log', 'log']]
@@ -41,6 +49,7 @@ geo_lon=g_res/(vincenty([0,0], [1,0]).meters)
 alpha=calculate_pg_normalizer(privacy_levels[0],genric_utilities[0],g_res) # Normalizer required planar geometric and exponential mechanisms
 
 uniform=1 # If uniform==0, nonuniform rider and driver distributions in the area of interest will be maintained 
+r_uniform=1
 uniform_eta=1 # unused
 uniform_dm=1 # unused
 g_remap=0

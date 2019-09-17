@@ -17,12 +17,12 @@ The location obfuscation mechanism should be the same as that used in rest of th
 
 Inputs:
     lat1, lon1, lat2, lon2: geo-coordinates of the region of interest. Make sure - lat1 < lat2 and lon1 < lon2.
-    regions: for discrete LPPMs, grid of regions * regions is created
+    regions: for discrete LPPMs, grid of regions * regions is created; hardcoded to 15
     num_riders, num_drivers: number of agents to generate data for
     database_name: name of the database
     mech_name: name of the LPPM to use. choose from {planar_lap, planar_geo, exp}
-    gen_util: 
-    privacy_level: 
+    gen_util: radius of obfuscation required for geo-indistinguishability guarantees
+    privacy_level: level of privacy that the geo-indistinguishability guarantees within radius equal to gen_util 
     z_qlg: unused
     g_res: grid resolution; used for discrete LPPMs
     alpha, geo_lat, geo_lon: attribute of planar geometric mechanism
