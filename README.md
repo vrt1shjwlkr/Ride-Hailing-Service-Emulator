@@ -59,7 +59,9 @@ python mongodbGenerator.py number_riders, number_drivers, regions, db_name, mech
 
 ## Reproducing the results:
 
-In order to reproduce the results in the paper, we provide sample scripts which can be modified to obtain the rest of the results in the paper. The details are as follows:
+In order to reproduce the results in the paper, we provide sample scripts which can be modified to obtain the rest of the results in the paper. With the default configurations provided in the respective run_* files below, the time it takes to complete their run and re-produce the desired results varies from 6-10 hours. To check if code is making progress or not, please check the contents of .csv files: Specfically, one should check if the more ride details are being updated in the rider_results_* csv files that are placed inside the folder with name given by exp_folder in the corresponding script. 
+
+The details of how to reproduce the results are as follows:
 
 ### Reproducing Figure 3
 This figure demonstrates the effect of different parameters of RHSes on the evaluation of LPPMs. For demonstration, we use planar Laplace mechanism. More specifically, the figure demonstrates the effect of -- drivers' acceptance model, drivers' ETA tolerance and the number of drivers in each run; the details of these parameters are in Sec. 5.1.2.
